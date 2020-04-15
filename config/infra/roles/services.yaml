@@ -1,0 +1,31 @@
+---
+vars:
+  region: "%{hiera('region')}"
+  component: "%{hiera('component')}"
+  deployment_identifier: "%{hiera('deployment_identifier')}"
+
+  private_network_cidr: "%{hiera('private_network_cidr')}"
+  version_number: "%{hiera('version_number')}"
+
+  secrets_bucket_name: "%{hiera('secrets_bucket_name')}"
+
+  domain_state_bucket_region: "%{hiera('domain_state_bucket_region')}"
+  domain_state_bucket_name: "%{hiera('domain_state_bucket_name')}"
+  domain_state_bucket_is_encrypted: "%{hiera('domain_state_bucket_is_encrypted')}"
+  domain_state_key: "%{hiera('domain_state_key')}"
+
+  network_state_bucket_region: "%{hiera('network_state_bucket_region')}"
+  network_state_bucket_name: "%{hiera('network_state_bucket_name')}"
+  network_state_bucket_is_encrypted: "%{hiera('network_state_bucket_is_encrypted')}"
+  network_state_key: "%{hiera('network_state_key')}"
+
+  cluster_state_bucket_region: "%{hiera('cluster_state_bucket_region')}"
+  cluster_state_bucket_name: "%{hiera('cluster_state_bucket_name')}"
+  cluster_state_bucket_is_encrypted: "%{hiera('cluster_state_bucket_is_encrypted')}"
+  cluster_state_key: "%{hiera('cluster_state_key')}"
+
+backend_config:
+  region: "%{hiera('services_state_bucket_region')}"
+  bucket: "%{hiera('services_state_bucket_name')}"
+  encrypt: "%{hiera('services_state_bucket_is_encrypted')}"
+  key: "%{hiera('services_state_key')}"
