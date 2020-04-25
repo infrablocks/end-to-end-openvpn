@@ -2,6 +2,7 @@ require 'confidante'
 require 'rake_terraform'
 require 'rake_docker'
 require 'rake_ssh'
+require 'rake_easy_rsa'
 
 require_relative 'lib/terraform_output'
 require_relative 'lib/version'
@@ -12,6 +13,9 @@ version = Version.from_file('build/version')
 RakeTerraform.define_installation_tasks(
     path: File.join(Dir.pwd, 'vendor', 'terraform'),
     version: '0.12.17')
+RakeEasyRSA.define_installation_tasks(
+    path: File.join(Dir.pwd, 'vendor', 'easy-rsa'),
+    version: '3.0.7')
 
 RakeSSH.define_key_tasks(
     namespace: :cluster_key,
@@ -121,5 +125,13 @@ namespace :services do
 
     t.backend_config = deployment_configuration.backend_config
     t.vars = deployment_configuration.vars
+  end
+end
+
+namespace :pki do
+  RakeEasyRSA.define_pki_tasks do |t|
+    t.pki_directory = 'config/secrets/pki'
+    t.common_name = 'MyPulse VPN'
+    t.expires_in_days = 365
   end
 end
