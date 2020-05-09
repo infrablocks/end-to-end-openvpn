@@ -1,0 +1,25 @@
+client
+proto tcp
+remote vpn.example.com
+port 1194
+dev tun
+nobind
+
+compress lzo
+
+resolv-retry infinite
+persist-key
+persist-tun
+keepalive 15 60
+
+<ca>
+<%= @ca_certificate %>
+</ca>
+
+<cert>
+<%= @client_certificate %>
+</cert>
+
+<key>
+<%= @client_key %>
+</key>
