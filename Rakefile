@@ -1,12 +1,10 @@
 require 'confidante'
 require 'rake_terraform'
-require 'rake_docker'
 require 'rake_ssh'
 require 'rake_easy_rsa'
 require 'rake_gpg'
 require 'rake_template'
 
-require_relative 'lib/terraform_output'
 require_relative 'lib/version'
 
 configuration = Confidante.configuration
