@@ -24,7 +24,7 @@ codebase, we've just used `openvpn-example`, but this could easily be
 
 The individual bits that make up a component. Examples of roles include the 
 `database`, `log-group`, and the `service`. You can see how we layer together
-roles in the `config/infra/roles` directory.
+roles in the `config/roles` directory.
 
 ### Deployment Identifier
 
