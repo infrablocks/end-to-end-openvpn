@@ -17,8 +17,8 @@ explanation:
 A collection of infrastructure, which together provides value. For example, a
 typical micro-service to serve customer information, with a database and an ECS
 Service, would all come under the component `customer-service`. For this 
-codebase, we've just used `concourse-example`, but this could easily be 
-`ci-server`.
+codebase, we've just used `openvpn-example`, but this could easily be 
+`vpn-server`.
 
 ### Role
 
@@ -118,7 +118,7 @@ up `10.0.0.0/16`.
 $ go "network:provision[$DEPLOYMENT_IDENTIFIER]"
 ```
 
-### Provisioning the Cluster
+### Provision the Cluster
 
 We need to provision some machines to run our ECS cluster on. In this example
 we spin up a single `t2.medium` box per availability zone. In this case, it's
@@ -128,7 +128,7 @@ three.
 $ go "cluster:provision[$DEPLOYMENT_IDENTIFIER]"
 ```
 
-### Provisioning the Services
+### Provision the Services
 
 Once we have everything we need, now we just need to tell ECS to deploy the
 services. This will give us some ECS services, as well as a load balancer.
