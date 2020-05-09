@@ -103,12 +103,6 @@ CI by name rather than by IP address.
 $ go "domain:provision[$DEPLOYMENT_IDENTIFIER,example.com]"
 ```
 
-### Setup a TLS Certificate
-
-You'll also need to go to the _Certificate Manager_ in AWS, and create a TLS
-certificate for your domain. If your domain is `example.com`, your certificate
-should cover `example.com` and `*.example.com`.
-
 ### Provision the network
 
 We need to build a network to put our services into. At the moment it just takes
