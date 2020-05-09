@@ -1,0 +1,2 @@
+config/secrets/** filter=git-crypt-user diff=git-crypt-user
+config/secrets/pki/** filter=git-crypt-operator diff=git-crypt-operator
