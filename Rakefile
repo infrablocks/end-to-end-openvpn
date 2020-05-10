@@ -117,7 +117,7 @@ end
 namespace :pki do
   RakeEasyRSA.define_pki_tasks do |t|
     t.pki_directory = 'config/secrets/pki'
-    t.common_name = 'MyPulse VPN'
+    t.common_name = 'InfraBlocks Example VPN'
     t.expires_in_days = 365
   end
 end
