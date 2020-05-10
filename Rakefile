@@ -88,10 +88,9 @@ namespace :cluster do
     t.source_directory = 'infra/cluster'
     t.work_directory = 'build'
 
-    t.backend_config configuration
+    t.backend_config = configuration
         .for_overrides(args)
-        .for_scope(
-            role: 'cluster')
+        .for_scope(role: 'cluster')
         .backend_config
 
     t.vars = configuration
