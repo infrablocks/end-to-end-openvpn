@@ -1,11 +1,13 @@
 client
 proto tcp
-remote vpn.example.com
+remote <%= @dns_address %>
 port 1194
 dev tun
 nobind
 
-compress lzo
+allow-pull-fqdn
+auth-nocache
+remote-cert-tls server
 
 resolv-retry infinite
 persist-key

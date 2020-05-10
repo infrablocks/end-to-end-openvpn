@@ -5,10 +5,7 @@ require 'rake_easy_rsa'
 require 'rake_gpg'
 require 'rake_template'
 
-require_relative 'lib/version'
-
 configuration = Confidante.configuration
-version = Version.from_file('build/version')
 
 RakeTerraform.define_installation_tasks(
     path: File.join(Dir.pwd, 'vendor', 'terraform'),
@@ -100,26 +97,16 @@ namespace :cluster do
   end
 end
 
-namespace :services do
+namespace :service do
   RakeTerraform.define_command_tasks(
-      configuration_name: 'concourse services',
+      configuration_name: 'service',
       argument_names: [:deployment_identifier]
   ) do |t, args|
-    deployment_identifier = args.deployment_identifier
-    concourse_config = YAML.load_file(
-        "config/secrets/concourse/web/#{deployment_identifier}.yaml")
-    database_config = YAML.load_file(
-        "config/secrets/database/#{deployment_identifier}.yaml")
     deployment_configuration = configuration
-        .for_overrides(
-            args.to_hash
-                .merge(database_config)
-                .merge(concourse_config)
-                .merge(version_number: version.to_docker_tag))
-        .for_scope(role: 'services')
+        .for_overrides(args)
+        .for_scope(role: 'service')
 
-
-    t.source_directory = 'infra/services'
+    t.source_directory = 'infra/service'
     t.work_directory = 'build'
 
     t.backend_config = deployment_configuration.backend_config
@@ -155,10 +142,23 @@ namespace :encryption do
   end
 end
 
+namespace :server do
+  desc "Generate a server certificate and key for the VPN"
+  task :generate, [:dns_address] do |_, args|
+    Rake::Task['pki:server:create'].invoke(args.dns_address)
+  end
+
+  desc "Revoke a server certificate and key for the VPN"
+  task :revoke, [:dns_address] do |_, args|
+    Rake::Task['pki:certificate:revoke'].invoke(args.dns_address)
+  end
+end
+
 namespace :client do
   desc "Add a user to the VPN"
-  task :add, [:email_address] do |_, args|
+  task :add, [:email_address,:dns_address] do |_, args|
     email_address = args.email_address
+    dns_address = args.dns_address
 
     work_directory = 'build/openvpn'
     pki_directory = 'config/secrets/pki'
@@ -185,7 +185,8 @@ namespace :client do
             client_ovpn_rendered_path,
             ca_certificate: read_certificate(ca_certificate_path),
             client_certificate: read_certificate(client_certificate_path),
-            client_key: read_key(client_key_path))
+            client_key: read_key(client_key_path),
+            dns_address: dns_address)
     Rake::Task['encryption:encrypt']
         .invoke(
             key_file_path,
@@ -197,7 +198,14 @@ namespace :client do
 
   desc "Remove a user from the VPN"
   task :remove, [:email_address] do |_, args|
-    Rake::Task['pki:certificate:revoke'].invoke(args.email_address)
+    email_address = args.email_address
+
+    openvpn_directory = 'config/secrets/openvpn'
+    client_ovpn_encrypted_path =
+        "#{openvpn_directory}/#{email_address}.ovpn.gpg"
+
+    Rake::Task['pki:certificate:revoke'].invoke(email_address)
+    File.unlink(client_ovpn_encrypted_path)
   end
 end
 
