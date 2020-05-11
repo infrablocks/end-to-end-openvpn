@@ -151,6 +151,7 @@ namespace :server do
   desc "Revoke a server certificate and key for the VPN"
   task :revoke, [:dns_address] do |_, args|
     Rake::Task['pki:certificate:revoke'].invoke(args.dns_address)
+    Rake::Task['pki:crl:generate']
   end
 end
 
@@ -205,6 +206,7 @@ namespace :client do
         "#{openvpn_directory}/#{email_address}.ovpn.gpg"
 
     Rake::Task['pki:certificate:revoke'].invoke(email_address)
+    Rake::Task['pki:crl:generate']
     File.unlink(client_ovpn_encrypted_path)
   end
 end
