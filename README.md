@@ -38,7 +38,7 @@ and `production-green`.
 
 This code requires terraform 0.12 or greater.
 
-### Setting up your machine (optional)
+### Set up your machine (optional)
 
 We use the `go` script to automate pre-install steps like installing Gems. To 
 get `go` onto the PATH, we use direnv. If you want to skip this step, use `rake` 
@@ -49,19 +49,41 @@ $ brew install direnv
 $ direnv allow
 ```
 
-### Unlocking secrets
+### Unlock the secrets
 
 It's not recommended, but for this example we keep secrets in the repository.
 
-We keep them locked up using `git-crypt`, but we've provided the key for you to
-unlock them.
-
-**If you want to deploy this for real, roll these secrets!**
+We keep them locked up using `git-crypt` and we've provided example keys for 
+you to unlock them.
 
 ```bash
 $ brew install git-crypt
-$ git-crypt unlock ./git-crypt-key
 ```
+
+To securely manage the VPN, we are using two different roles, an "operator" and
+a "user":
+
+- Operators are responsible for managing the public key infrastructure (PKI), 
+  and provisioning certificates for VPN clients and servers.
+- Users are the clients of the VPN and are able to access their encrypted VPN
+  profiles.   
+
+To unlock the secrets for a user:
+
+```bash
+$ git-crypt unlock ./git-crypt-user-key
+```
+
+To unlock the secrets for an operator:
+
+```bash
+$ git-crypt unlock ./git-crypt-operator-key
+```
+
+**If you want to deploy this for real:**
+
+- Roll all the secrets!
+- Use GPG keys to manage access for each of the roles.
 
 ### Choose a deployment identifier
 
@@ -131,4 +153,68 @@ Note: In this example, we've opened up the CI to `0.0.0.0/0`.
 
 ```
 $ go "services:provision[$DEPLOYMENT_IDENTIFIER]"
+```
+
+## Operation
+
+OpenVPN requires a PKI to manage VPN clients and servers. We use a set of Rake
+tasks to administer the PKI, stored in `config/secrets/pki`, securely. These 
+Rake tasks should be run by an operator as they update the encrypted PKI.
+
+### Generate PKI
+
+To generate a new PKI, including the root certificate authority (CA) 
+certificate, Diffie-Hellman (DH) parameters and a certificate revocation list 
+(CRL):
+
+```
+$ go "pki:generate"
+```
+
+### Manage server keys and certificates
+
+To generate a key and certificate for a VPN server:
+
+```
+$ go "server:generate[<dns-address-of-server>]"
+```
+
+To revoke a VPN server certificate:
+
+```
+$ go "server:revoke[<dns-address-of-server>]"
+```
+
+### Manage client profiles
+
+We generate full `.ovpn` profiles for clients of the VPN and store them 
+encrypted with the user's GPG key in the `config/secrets/openvpn` directory.
+The Rake tasks assume the user's public GPG key is available at 
+`config/gpg/<user-email-address>.gpgkey` so make sure it's available before 
+running these commands.
+
+To add a new client to the VPN:
+
+```
+$ go "client:add[<user-email-address>]"
+``` 
+
+To remove a client from the VPN:
+
+```
+$ go "client:remove[<user-email-address>]"
+```
+
+## Usage
+
+To get set up as a user of the VPN:
+
+1. Add your GPG key to the `config/gpg` directory as 
+`<your-email-address>.gpgkey`.
+2. Ask an operator to create your profile.
+3. Decrypt your profile and add to your VPN client:
+
+```
+gpg -d config/secrets/openvpn/<your-email-address>.ovpn.gpg > profile.ovpn
+open profile.ovpn
 ```
