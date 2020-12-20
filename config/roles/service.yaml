@@ -33,7 +33,7 @@ vars:
   cluster_state_bucket_is_encrypted: "%{hiera('cluster_state_bucket_is_encrypted')}"
 
 backend_config:
-  bucket: "%{hiera('services_state_bucket_name')}"
-  key: "%{hiera('services_state_key')}"
-  region: "%{hiera('services_state_bucket_region')}"
-  encrypt: "%{hiera('services_state_bucket_is_encrypted')}"
+  bucket: "%{hiera('service_state_bucket_name')}"
+  key: "%{hiera('service_state_key')}"
+  region: "%{hiera('service_state_bucket_region')}"
+  encrypt: "%{hiera('service_state_bucket_is_encrypted')}"

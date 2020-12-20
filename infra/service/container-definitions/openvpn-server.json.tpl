@@ -14,8 +14,8 @@
       }
     ],
     "environment": [
-      { "name": "S3_BUCKET_REGION", "value": "$${region}" },
-      { "name": "ENV_FILE_S3_OBJECT_PATH", "value": "${env_file_object_path}" }
+      { "name": "AWS_S3_BUCKET_REGION", "value": "$${region}" },
+      { "name": "AWS_S3_ENV_FILE_OBJECT_PATH", "value": "${env_file_object_path}" }
     ],
     "logConfiguration": {
       "logDriver": "awslogs",

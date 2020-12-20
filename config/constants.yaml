@@ -6,7 +6,7 @@ private_network_cidr: "10.0.0.0/16"
 
 service_desired_count: 3
 
-openvpn_server_image: "infrablocks/openvpn-aws:0.5.0"
+openvpn_server_image: "infrablocks/openvpn-aws:0.7.0"
 openvpn_server_service_container_port: 1194
 openvpn_server_service_host_port: 1194
 openvpn_server_service_lb_port: 1194
@@ -31,7 +31,7 @@ cluster_state_bucket_name: "%{hiera('state_bucket_name')}"
 cluster_state_bucket_is_encrypted: "true"
 cluster_state_key: "cluster/deployments/%{hiera('deployment_identifier')}.tfstate"
 
-services_state_bucket_region: "%{hiera('region')}"
-services_state_bucket_name: "%{hiera('state_bucket_name')}"
-services_state_bucket_is_encrypted: "true"
-services_state_key: "services/deployments/%{hiera('deployment_identifier')}.tfstate"
+service_state_bucket_region: "%{hiera('region')}"
+service_state_bucket_name: "%{hiera('state_bucket_name')}"
+service_state_bucket_is_encrypted: "true"
+service_state_key: "service/deployments/%{hiera('deployment_identifier')}.tfstate"
