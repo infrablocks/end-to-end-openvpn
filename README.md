@@ -60,8 +60,8 @@ you to unlock them.
 $ brew install git-crypt
 ```
 
-To securely manage the VPN, we are using two different roles, an "operator" and
-a "user":
+To securely manage the VPN, we are using two different secrets access roles, 
+an "operator" and a "user":
 
 - Operators are responsible for managing the public key infrastructure (PKI), 
   and provisioning certificates for VPN clients and servers.
@@ -196,7 +196,7 @@ running these commands.
 To add a new client to the VPN:
 
 ```
-$ go "client:add[<user-email-address>]"
+$ go "client:add[<user-email-address>,<vpn-dns-address>]"
 ``` 
 
 To remove a client from the VPN:
@@ -204,6 +204,22 @@ To remove a client from the VPN:
 ```
 $ go "client:remove[<user-email-address>]"
 ```
+
+### Pushing additional routes
+
+In some instances, we'll want all traffic for a given third party to go through
+the VPN such that it originates from the NAT gateway rather from our 
+development machines. This is common in the case where IP whitelisting is
+used by those 3rd parties.
+
+OpenVPN supports pushing specific routes to the client on connection. The
+3rd party server address can be expressed as a DNS name or as an IP address. In
+the case of a DNS name, OpenVPN resolves the DNS name and pushes the resulting
+IP address down to the client.
+
+To add additional pushed routes, see `src/openvpn/server.conf.additional`. The
+contents of this file are appended to the server configuration on container
+start-up so any other OpenVPN configuration can be added here also.
 
 ## Usage
 
