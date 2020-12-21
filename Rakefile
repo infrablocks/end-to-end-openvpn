@@ -19,20 +19,20 @@ RakeSSH.define_key_tasks(
     path: 'config/secrets/cluster/',
     comment: 'maintainers@infrablocks.io')
 
-namespace :bucket do
+namespace :bootstrap do
   RakeTerraform.define_command_tasks(
-      configuration_name: 'state bucket',
+      configuration_name: 'bootstrap',
       argument_names: [:deployment_identifier]
   ) do |t, args|
-    t.source_directory = 'infra/state_bucket'
+    t.source_directory = 'infra/bootstrap'
     t.work_directory = 'build'
 
     t.state_file =
-        File.join(Dir.pwd, "state/state_bucket/#{args.deployment_identifier}.tfstate")
+        File.join(Dir.pwd, "state/bootstrap/#{args.deployment_identifier}.tfstate")
 
     t.vars = configuration
         .for_overrides(args)
-        .for_scope(role: 'state-bucket')
+        .for_scope(role: 'bootstrap')
         .vars
   end
 end
@@ -102,6 +102,30 @@ namespace :service do
 
     t.backend_config = deployment_configuration.backend_config
     t.vars = deployment_configuration.vars
+  end
+end
+
+namespace :deployment do
+  task :provision, [:deployment_identifier, :domain_name] do |_, args|
+    deployment_identifier = args.deployment_identifier
+    domain_name = args.domain_name
+
+    Rake::Task['bootstrap:provision'].invoke(deployment_identifier)
+    Rake::Task['domain:provision'].invoke(deployment_identifier, domain_name)
+    Rake::Task['network:provision'].invoke(deployment_identifier)
+    Rake::Task['cluster:provision'].invoke(deployment_identifier)
+    Rake::Task['service:provision'].invoke(deployment_identifier)
+  end
+
+  task :destroy, [:deployment_identifier, :domain_name] do |_, args|
+    deployment_identifier = args.deployment_identifier
+    domain_name = args.domain_name
+
+    Rake::Task['service:destroy'].invoke(deployment_identifier)
+    Rake::Task['cluster:destroy'].invoke(deployment_identifier)
+    Rake::Task['network:destroy'].invoke(deployment_identifier)
+    Rake::Task['domain:destroy'].invoke(deployment_identifier, domain_name)
+    Rake::Task['bootstrap:destroy'].invoke(deployment_identifier)
   end
 end
 
