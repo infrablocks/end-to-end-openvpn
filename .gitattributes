@@ -1,2 +1,3 @@
-config/secrets/** filter=git-crypt-user diff=git-crypt-user
-config/secrets/pki/** filter=git-crypt-operator diff=git-crypt-operator
+config/secrets/** filter=git-crypt-operator diff=git-crypt-operator
+config/secrets/.unlocked filter=git-crypt diff=git-crypt
+config/secrets/openvpn/** filter=git-crypt diff=git-crypt
