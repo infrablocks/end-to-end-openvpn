@@ -20,7 +20,7 @@ data "template_file" "openvpn_server_task_container_definitions" {
 
 module "openvpn_server_service" {
   source  = "infrablocks/ecs-service/aws"
-  version = "2.4.0"
+  version = "3.2.0"
 
   component = var.component
   deployment_identifier = var.deployment_identifier

@@ -9,7 +9,7 @@ configuration = Confidante.configuration
 
 RakeTerraform.define_installation_tasks(
     path: File.join(Dir.pwd, 'vendor', 'terraform'),
-    version: '0.12.17')
+    version: '0.14.3')
 RakeEasyRSA.define_installation_tasks(
     path: File.join(Dir.pwd, 'vendor', 'easy-rsa'),
     version: '3.0.7')
@@ -42,18 +42,15 @@ namespace :domain do
       configuration_name: 'domain',
       argument_names: [:deployment_identifier, :domain_name]
   ) do |t, args|
+    configuration = configuration
+        .for_overrides(args)
+        .for_scope(role: 'domain')
+
     t.source_directory = 'infra/domain'
     t.work_directory = 'build'
 
-    t.backend_config = configuration
-        .for_overrides(args)
-        .for_scope(role: 'domain')
-        .backend_config
-
-    t.vars = configuration
-        .for_overrides(args)
-        .for_scope(role: 'domain')
-        .vars
+    t.backend_config = configuration.backend_config
+    t.vars = configuration.vars
   end
 end
 
@@ -62,18 +59,15 @@ namespace :network do
       configuration_name: 'network',
       argument_names: [:deployment_identifier]
   ) do |t, args|
+    configuration = configuration
+        .for_overrides(args)
+        .for_scope(role: 'network')
+
     t.source_directory = 'infra/network'
     t.work_directory = 'build'
 
-    t.backend_config = configuration
-        .for_overrides(args)
-        .for_scope(role: 'network')
-        .backend_config
-
-    t.vars = configuration
-        .for_overrides(args)
-        .for_scope(role: 'network')
-        .vars
+    t.backend_config = configuration.backend_config
+    t.vars = configuration.vars
   end
 end
 
@@ -82,18 +76,15 @@ namespace :cluster do
       configuration_name: 'cluster',
       argument_names: [:deployment_identifier]
   ) do |t, args|
+    configuration = configuration
+        .for_overrides(args)
+        .for_scope(role: 'cluster')
+
     t.source_directory = 'infra/cluster'
     t.work_directory = 'build'
 
-    t.backend_config = configuration
-        .for_overrides(args)
-        .for_scope(role: 'cluster')
-        .backend_config
-
-    t.vars = configuration
-        .for_overrides(args)
-        .for_scope(role: 'cluster')
-        .vars
+    t.backend_config = configuration.backend_config
+    t.vars = configuration.vars
   end
 end
 

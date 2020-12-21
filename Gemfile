@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'rake', '~> 13.0'
-gem 'rake_terraform', '~> 1.9'
+gem 'rake_terraform', '~> 1.11'
 gem 'rake_ssh', '~> 0.4'
-gem 'rake_easy_rsa', '~> 0.5'
+gem 'rake_easy_rsa', '~> 0.7'
 gem 'rake_gpg', '~> 0.10'
 gem 'rake_template', '~> 0.2'
 gem 'confidante', '~> 0.21'

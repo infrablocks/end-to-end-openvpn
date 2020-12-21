@@ -1,6 +1,6 @@
 module "ecs_cluster" {
   source = "infrablocks/ecs-cluster/aws"
-  version = "2.4.0"
+  version = "3.4.0"
 
   region = var.region
   vpc_id = data.terraform_remote_state.network.outputs.vpc_id
