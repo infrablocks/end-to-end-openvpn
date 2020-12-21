@@ -2,4 +2,4 @@ variable "region" {}
 
 variable "deployment_identifier" {}
 
-variable "state_bucket_name" {}
+variable "storage_bucket_name" {}

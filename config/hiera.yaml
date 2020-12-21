@@ -8,4 +8,4 @@
   :datadir: "config"
 :hierarchy:
   - "roles/%{role}"
-  - "constants"
+  - "defaults"
