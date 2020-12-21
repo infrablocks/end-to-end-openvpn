@@ -6,7 +6,7 @@ private_network_cidr: "10.0.0.0/16"
 
 service_desired_count: 3
 
-openvpn_server_image: "infrablocks/openvpn-aws:0.7.0"
+openvpn_server_image: "infrablocks/openvpn-aws:0.10.0"
 openvpn_server_service_container_port: 1194
 openvpn_server_service_host_port: 1194
 openvpn_server_service_lb_port: 1194
