@@ -9,10 +9,10 @@ configuration = Confidante.configuration
 
 RakeTerraform.define_installation_tasks(
     path: File.join(Dir.pwd, 'vendor', 'terraform'),
-    version: '0.14.3')
+    version: '1.1.7')
 RakeEasyRSA.define_installation_tasks(
     path: File.join(Dir.pwd, 'vendor', 'easy-rsa'),
-    version: '3.0.7')
+    version: '3.0.8')
 
 RakeSSH.define_key_tasks(
     namespace: :cluster_key,
